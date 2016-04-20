@@ -5,7 +5,7 @@ block content
 		.page-header
 			h1= title
 		.row
-			.col-md-6.addNewLake
+			.col-md-5.addNewLake
 				if error
 					p #{error}
 				//UI for adding a new lake
@@ -16,28 +16,30 @@ block content
 							input.form-control(name="name" type="text" required)
 						button.btn.btn-default(name="addLake" type="submit") Add new lake
 
-			.col-md-6.runList
+			.col-md-7.runList
 				//UI for displaying run data
 				h2 Run history
 				for run in runList
-					ul.list-group
-						li.list-group-item-heading
-							h3 Lake: #{run.name}
-						//da do run run.runs, da do run.runs
-						for date in run.runs
-							li.list-group-item #{date.dateHumann} : #{date.timeHuman}
-					form.form-inline(action="/addRun", method="POST")
-						input(name="name" value="#{run.name}" type="hidden")
-						.form-group.form-group-sm
-							label New run date
-								input(name="dateRun" type="date" required)
-						br
-						.form-group.form-group-sm
-							label New run time
-								input(name="timeMM" type="number" placeholder="MM" size="3" min="0" required)
-							label :
-								input(name="timeSS" type="number" placeholder="SS" size="3" min="0" required)
-							button.btn.btn-default.btn-sm(name="addRun" type="submit") Add new run
+					.well
+						ul.list-group
+							li.list-group-item.list-group-item-heading.list-group-item-info
+								h3 Lake: #{run.name}
+							//da do run run.runs, da do run.runs
+							for date in run.runs
+								li.list-group-item #{date.dateHuman} : #{date.timeHuman}
+						form.form-inline(action="/addRun", method="POST")
+							input(name="name" value="#{run.name}" type="hidden")
+							.form-group.form-group-sm
+								label New run date
+									input.form-control(name="dateRun" type="date" required)
+							br
+							.form-group.form-group-sm
+								label Minutes
+									input.form-control(name="timeMM" type="number" placeholder="MM"  min="0" required)
+								label Seconds
+									input.form-control(name="timeSS" type="number" placeholder="SS"  min="0" required)
+								br
+								button.btn.btn-default.btn-sm(name="addRun" type="submit") Add new run
 
 
 

@@ -13,6 +13,11 @@ router.get('/', function (req, res, next) {
 		if (err) {
 			return next(err);
 		}
+
+		//TODO check for shortest run time
+		//seems to be a way sort by a key
+		// http://stackoverflow.com/questions/19751420/mongoosejs-how-to-find-the-element-with-the-maximum-value
+
 		res.render('index', {
 			title: 'Lake Runner',
 			runList: lakeDocs,
@@ -70,14 +75,17 @@ router.post('/addRun', function (req, res, next) {
 		}
 
 		var newDate = moment(req.body.dateRun);
-		var newTime = (req.body.timeMM * 60) + req.body.timeSS;
+		var newTime = (parseInt(req.body.timeMM) * 60) + parseInt(req.body.timeSS);
+		console.log("newTime: " + newTime);
 		//convert it back from seconds anyway
 /*		var timeInMinutes = Math.floor(newTime / 60);
 		var timeInSeconds = newTime % 60; */
 
 		// Instead of crying over time formatting, use moment-duration-format
 		var timeString = moment.duration(newTime, 'seconds').format('hh:mm:ss');
+		console.log("timeString: " + timeString);
 		var dateString = moment(newDate).format('L'); // MM/DD/YYYY
+		console.log(dateString);
 
 		var newRun = {
 			timeSecs: newTime,
