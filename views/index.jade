@@ -26,7 +26,11 @@ block content
 								h3 Lake: #{run.name}
 							//da do run run.runs, da do run.runs
 							for date in run.runs
-								li.list-group-item #{date.dateHuman} : #{date.timeHuman}
+								if date.fastest
+									li.list-group-item.list-group-item-success #{date.dateHuman} : #{date.timeHuman}
+										span.badge Best!
+								else
+									li.list-group-item #{date.dateHuman} : #{date.timeHuman}
 						form.form-inline(action="/addRun", method="POST")
 							input(name="name" value="#{run.name}" type="hidden")
 							.form-group.form-group-sm

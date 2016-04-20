@@ -14,10 +14,30 @@ router.get('/', function (req, res, next) {
 			return next(err);
 		}
 
-		//TODO check for shortest run time
 		//seems to be a way sort by a key
 		// http://stackoverflow.com/questions/19751420/mongoosejs-how-to-find-the-element-with-the-maximum-value
 
+		//TODO do something sensible in the event of a tie
+		for (var i=0; i<lakeDocs.length; i++){
+			var shortestRunTime = Infinity;
+			var shortestRunIndex = 0;
+			var currentLake = lakeDocs[i];
+			if (! currentLake.runs.length == 0) {
+				for (var j=0; j<currentLake.runs.length; j++){
+					//iterate through each run and find lowest value
+					if (currentLake.runs[j].timeSecs < shortestRunTime) {
+						shortestRunTime = currentLake.runs[j].timeSecs;
+						shortestRunIndex = j;
+					}
+				}
+				//set a property for the object that gets passed to jade renderer
+				console.log("Shortest run for lake " + currentLake.name + " is " + shortestRunTime);
+				console.log("Index is " + shortestRunIndex);
+				lakeDocs[i].runs[shortestRunIndex].fastest = true;
+			}
+		}
+		
+		
 		res.render('index', {
 			title: 'Lake Runner',
 			runList: lakeDocs,
