@@ -14,7 +14,8 @@ var lakeSchema = new Schema({
 		dateRun: {
 			type: Date,
 			default: Date.now
-		}
+		},
+		dateHuman: String //human readable string because JS date object is messy
 	}]
 });
 

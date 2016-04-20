@@ -1,5 +1,7 @@
 var express = require('express');
 var router = express.Router();
+var moment = require('moment');
+require('moment-duration-format');
 
 var Lake = require('../models/lakes.js');
 
@@ -67,22 +69,21 @@ router.post('/addRun', function (req, res, next) {
 			return next(new Error('No lake found with name ' + req.body.name))
 		}
 
-		var newDate = req.body.dateRun;
+		var newDate = moment(req.body.dateRun);
 		var newTime = (req.body.timeMM * 60) + req.body.timeSS;
 		//convert it back from seconds anyway
-		//TODO expand this to handle hours
 /*		var timeInMinutes = Math.floor(newTime / 60);
-		var timeInSeconds = newTime % 60;
-		//TODO assert that these match submitted values?*/
-		var timeInMinutes = req.body.timeMM;
-		var timeInSeconds = req.body.timeSS; //workaround for now
-		//http://stackoverflow.com/questions/13859538/simplest-inline-method-to-left-pad-a-string
-		var timeString = ("000" + timeInMinutes).slice(-3) + ":" + ("00" + timeInSeconds).slice(-2);
+		var timeInSeconds = newTime % 60; */
+
+		// Instead of crying over time formatting, use moment-duration-format
+		var timeString = moment.duration(newTime, 'seconds').format('hh:mm:ss');
+		var dateString = moment(newDate).format('L'); // MM/DD/YYYY
 
 		var newRun = {
-			timeSecs: (timeInMinutes * 60 ) + timeInSeconds,
+			timeSecs: newTime,
 			timeHuman: timeString,
-			dateRun: newDate
+			dateRun: newDate,
+			dateHuman: dateString
 		};
 
 		lake.runs.push(newRun);
